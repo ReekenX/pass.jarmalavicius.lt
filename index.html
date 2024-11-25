@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #password {
+            font-size: 24px;
+            padding: 20px;
+            text-align: center;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div id="password"></div>
+
+    <script>
+    const commonWords = [
+        "about", "able", "according", "account", "across", "actually", "after", "again", "against", 
+        "ahead", "almost", "along", "also", "although", "always", "among", "amount", "analysis", 
+        "another", "answer", "anyone", "anything", "anywhere", "appear", "apply", "approach", 
+        "appropriate", "area", "around", "arrive", "article", "artist", "assume", "attack", 
+        "attention", "authority", "available", "avoid", "away", "back", "base", "basic", "basis", 
+        "beautiful", "because", "become", "before", "begin", "behavior", "behind", "believe", 
+        "benefit", "best", "better", "between", "beyond", "bill", "birth", "black", "blood", 
+        "blue", "board", "body", "book", "born", "both", "break", "bring", "budget", "build", 
+        "business", "call", "camera", "campaign", "capital", "card", "care", "career", "carry", 
+        "case", "catch", "cause", "cell", "center", "central", "certain", "certainly", "chair", 
+        "chance", "change", "character", "charge", "check", "child", "choice", "choose", "church", 
+        "citizen", "city", "civil", "claim", "class", "clear", "clearly", "close", "coach", 
+        "cold", "collection", "college", "color", "come", "commercial", "common", "community", 
+        "company", "compare", "complete", "completely", "computer", "concern", "condition", 
+        "conference", "congress", "consider", "consumer", "contain", "continue", "control", 
+        "cost", "could", "country", "couple", "course", "court", "cover", "create", "crime", 
+        "cultural", "culture", "current", "customer", "dark", "data", "daughter", "dead", 
+        "deal", "death", "debate", "decade", "decide", "decision", "deep", "defense", "degree", 
+        "democratic", "describe", "design", "despite", "detail", "determine", "develop", 
+        "development", "difference", "different", "difficult", "dinner", "direction", "director", 
+        "discover", "discuss", "discussion", "disease", "doctor", "door", "down", "draw", 
+        "dream", "drive", "drop", "drug", "during", "each", "early", "east", "economic", 
+        "economy", "edge", "education", "effect", "effective", "effort", "eight", "either", 
+        "election", "else", "employee", "energy", "enjoy", "enough", "enter", "entire", 
+        "environment", "environmental", "especially", "establish", "even", "evening", "event", 
+        "ever", "every", "everybody", "everyone", "everything", "evidence", "exactly", "example", 
+        "executive", "exist", "expect", "experience", "expert", "explain", "face", "fact", 
+        "factor", "fail", "fall", "family", "fast", "father", "fear", "federal", "feel", 
+        "feeling", "field", "fight", "figure", "fill", "film", "final", "finally", "financial", 
+        "find", "fine", "finger", "finish", "fire", "firm", "first", "fish", "five", "floor", 
+        "focus", "follow", "food", "foot", "force", "foreign", "forget", "form", "former", 
+        "forward", "four", "free", "friend", "from", "front", "full", "fund", "future", 
+        "game", "garden", "general", "generation", "girl", "give", "glass", "goal", "good", 
+        "government", "great", "green", "ground", "group", "grow", "growth", "guess", "guide", 
+        "hair", "half", "hand", "hang", "happen", "happy", "hard", "have", "head", "health", 
+        "hear", "heart", "heat", "heavy", "help", "here", "high", "history", "hold", "home", 
+        "hope", "hospital", "hotel", "hour", "house", "however", "huge", "human", "hundred", 
+        "husband", "idea", "identify", "image", "imagine", "impact", "important", "improve", 
+        "include", "including", "increase", "indeed", "indicate", "individual", "industry", 
+        "information", "inside", "instead", "institution", "interest", "interesting", 
+        "international", "interview", "into", "investment", "involve", "issue", "item", 
+        "itself", "join", "just", "keep", "kill", "kind", "kitchen", "know", "knowledge", 
+        "land", "language", "large", "last", "late", "later", "laugh", "lead", "leader", 
+        "learn", "least", "leave", "left", "legal", "less", "letter", "level", "life", 
+        "light", "like", "likely", "line", "list", "listen", "little", "live", "local", 
+        "long", "look", "lose", "loss", "love", "machine", "magazine", "main", "maintain", 
+        "major", "make", "male", "management", "manager", "many", "market", "marriage", 
+        "material", "matter", "maybe", "mean", "measure", "media", "medical", "meet", 
+        "meeting", "member", "memory", "mention", "message", "method", "middle", "might", 
+        "military", "million", "mind", "minute", "miss", "mission", "model", "modern", 
+        "moment", "money", "month", "more", "morning", "most", "mother", "mouth", "move", 
+        "movement", "movie", "much", "music", "must", "myself", "name", "nation", "national", 
+        "natural", "nature", "near", "nearly", "necessary", "need", "network", "never", 
+        "news", "newspaper", "next", "nice", "night", "none", "north", "note", "nothing", 
+        "notice", "number", "occur", "offer", "office", "officer", "official", "often", 
+        "once", "only", "open", "operation", "opportunity", "option", "order", "organization", 
+        "other", "others", "outside", "over", "owner", "page", "pain", "painting", "paper", 
+        "parent", "part", "participant", "particular", "particularly", "partner", "party", 
+        "pass", "past", "patient", "pattern", "peace", "people", "perform", "performance", 
+        "perhaps", "period", "person", "personal", "phone", "physical", "pick", "picture", 
+        "piece", "place", "plan", "plant", "play", "player", "point", "police", "policy", 
+        "political", "politics", "poor", "popular", "population", "position", "positive", 
+        "possible", "power", "practice", "prepare", "present", "president", "pressure", 
+        "pretty", "prevent", "price", "private", "probably", "problem", "process", "produce", 
+        "product", "production", "professional", "professor", "program", "project", "property", 
+        "protect", "prove", "provide", "public", "pull", "purpose", "push", "quality", 
+        "question", "quickly", "quite", "race", "radio", "raise", "range", "rate", "rather", 
+        "reach", "read", "ready", "real", "reality", "realize", "really", "reason", "receive", 
+        "recent", "recently", "recognize", "record", "reduce", "reflect", "region", "relate", 
+        "relationship", "religious", "remain", "remember", "remove", "report", "represent", 
+        "republican", "require", "research", "resource", "respond", "response", "responsibility", 
+        "rest", "result", "return", "reveal", "right", "rise", "risk", "road", "rock", 
+        "role", "room", "rule", "safe", "same", "save", "scene", "school", "science", 
+        "scientist", "score", "seat", "second", "section", "security", "seek", "seem", 
+        "sell", "send", "senior", "sense", "series", "serious", "serve", "service", "several", 
+        "sexual", "shake", "share", "shoot", "short", "shot", "should", "shoulder", "show", 
+        "side", "sign", "significant", "similar", "simple", "simply", "since", "sing", 
+        "single", "sister", "site", "situation", "size", "skill", "skin", "small", "smile", 
+        "social", "society", "soldier", "some", "somebody", "someone", "something", "sometimes", 
+        "song", "soon", "sort", "sound", "source", "south", "southern", "space", "speak", 
+        "special", "specific", "speech", "spend", "sport", "spring", "staff", "stage", 
+        "stand", "standard", "star", "start", "state", "statement", "station", "stay", 
+        "step", "still", "stock", "stop", "store", "story", "strategy", "street", "strong", 
+        "structure", "student", "study", "stuff", "style", "subject", "success", "successful", 
+        "such", "suddenly", "suffer", "suggest", "summer", "support", "sure", "surface", 
+        "system", "table", "take", "talk", "task", "teach", "teacher", "team", "technology", 
+        "television", "tell", "tend", "term", "test", "than", "thank", "that", "their", 
+        "them", "themselves", "then", "theory", "there", "these", "they", "thing", "think", 
+        "third", "this", "those", "though", "thought", "thousand", "threat", "three", 
+        "through", "throughout", "throw", "thus", "time", "today", "together", "tomorrow", 
+        "tonight", "total", "tough", "toward", "town", "trade", "traditional", "training", 
+        "treat", "treatment", "tree", "trial", "trip", "trouble", "true", "truth", "turn", 
+        "type", "under", "understand", "unit", "until", "upon", "usually", "value", "various", 
+        "very", "victim", "view", "violence", "visit", "voice", "vote", "wait", "walk", 
+        "wall", "want", "watch", "water", "wave", "well", "west", "western", "what", 
+        "whatever", "when", "where", "whether", "which", "while", "white", "whole", "whom", 
+        "whose", "wife", "will", "wind", "window", "wish", "with", "within", "without", 
+        "woman", "wonder", "word", "work", "worker", "world", "would", "write", "writer", 
+        "wrong", "yard", "yeah", "year", "young", "your", "yourself"
+    ];
+
+    function generatePassword() {
+        const words = [];
+        let totalLength = 0;
+
+        while (totalLength < 64) {
+            const randomWord =
+                commonWords[Math.floor(Math.random() * commonWords.length)];
+
+            // Check if adding the word (plus comma) would exceed 64 characters
+            if (totalLength + randomWord.length + 1 > 64) {
+                break;
+            }
+
+            words.push(randomWord);
+            totalLength += randomWord.length + 1; // +1 for the comma
+        }
+
+        const length = words.join(",").length + 1;
+        const password = words.join(",") + "," + length;
+        const result = password.charAt(0).toUpperCase() + password.slice(1);
+        return result.replace("," + length, "," + result.length);
+    }
+
+    // Display the password when the page loads
+    document.getElementById('password').textContent = generatePassword();
+    </script>
+</body>
+</html>
