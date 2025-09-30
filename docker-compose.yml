@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  web:
+    container_name: pass.jarmalavicius.lt
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    environment:
+      VIRTUAL_HOST: pass.jarmalavicius.lt
+      VIRTUAL_NETWORK: nginx_proxy
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: pass.jarmalavicius.lt
+      LETSENCRYPT_EMAIL: sysadmin@jarmalavicius.lt
+    restart: unless-stopped
