@@ -13,3 +13,8 @@ services:
       LETSENCRYPT_HOST: pass.jarmalavicius.lt
       LETSENCRYPT_EMAIL: sysadmin@jarmalavicius.lt
     restart: unless-stopped
+
+networks:
+  default:
+    name: nginx_proxy
+    external: true
