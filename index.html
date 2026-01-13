@@ -7805,16 +7805,27 @@
         "zoom"
     ];
 
+    // Length groups: [minLength, maxLength]
+    const lengthGroups = [
+        [20, 30],
+        [60, 70],
+        [120, 130]
+    ];
+    let currentGroupIndex = 1; // Start with 60-70 characters
+
     function generatePassword() {
+        const [minLength, maxLength] = lengthGroups[currentGroupIndex];
+        const targetLength = minLength + Math.floor(Math.random() * (maxLength - minLength + 1));
+
         const words = [];
         let totalLength = 0;
 
-        while (totalLength < 64) {
+        while (totalLength < targetLength) {
             const randomWord =
                 commonWords[Math.floor(Math.random() * commonWords.length)];
 
-            // Check if adding the word (plus comma) would exceed 64 characters
-            if (totalLength + randomWord.length + 1 > 64) {
+            // Check if adding the word (plus comma) would exceed target
+            if (totalLength + randomWord.length + 1 > maxLength) {
                 break;
             }
 
@@ -7828,8 +7839,21 @@
         return result.replace("," + length, "," + result.length);
     }
 
+    function updatePassword() {
+        document.getElementById('password').textContent = generatePassword();
+    }
+
+    // Toggle length group on SPACE key
+    document.addEventListener('keydown', function(event) {
+        if (event.code === 'Space') {
+            event.preventDefault();
+            currentGroupIndex = (currentGroupIndex + 1) % lengthGroups.length;
+            updatePassword();
+        }
+    });
+
     // Display the password when the page loads
-    document.getElementById('password').textContent = generatePassword();
+    updatePassword();
     </script>
 </body>
 </html>
