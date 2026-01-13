@@ -2,7 +2,7 @@
 
 A simple, privacy-focused passphrase generator that creates memorable yet secure passwords using random common English words.
 
-**Live**: https://pass.jarmalavicius.lt/
+**Live**: https://pass.jarmalavicius.lt/ (press `SPACE` to toggle password length)
 
 ## Privacy First
 
