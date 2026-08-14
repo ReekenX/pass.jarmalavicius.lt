@@ -7820,16 +7820,29 @@
     ];
     let currentGroupIndex = 0; // Start with the longest group, 110-120 characters
 
+    // Uniform integer in [0, max) from the CSPRNG. Math.random() is not usable here:
+    // its state is recoverable from a few outputs, so one leaked password would expose
+    // every other password generated in the same page session.
+    function randomInt(max) {
+        const limit = Math.floor(0x100000000 / max) * max; // drop the tail that biases the modulo
+        const buffer = new Uint32Array(1);
+        let value;
+        do {
+            crypto.getRandomValues(buffer);
+            value = buffer[0];
+        } while (value >= limit);
+        return value % max;
+    }
+
     function generatePassword() {
         const [minLength, maxLength] = lengthGroups[currentGroupIndex];
-        const targetLength = minLength + Math.floor(Math.random() * (maxLength - minLength + 1));
+        const targetLength = minLength + randomInt(maxLength - minLength + 1);
 
         const words = [];
         let totalLength = 0;
 
         while (totalLength < targetLength) {
-            const randomWord =
-                commonWords[Math.floor(Math.random() * commonWords.length)];
+            const randomWord = commonWords[randomInt(commonWords.length)];
 
             // Check if adding the word (plus comma) would exceed target
             if (totalLength + randomWord.length + 1 > maxLength) {
