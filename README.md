@@ -25,10 +25,10 @@ Example output: `Bamboo,aircraft,horizon,deeply,73`
 ## Features
 
 - **No server-side processing** - all password generation happens in your browser
-- **Ten length modes** - toggle with SPACE key:
-  - 20-30, 30-40, 40-50, 50-60 characters
-  - 60-70 characters (default)
-  - 70-80, 80-90, 90-100, 100-110, 110-120 characters
+- **Ten length modes** - toggle with SPACE key, longest first:
+  - 110-120 characters (default)
+  - 100-110, 90-100, 80-90, 70-80, 60-70 characters
+  - 50-60, 40-50, 30-40, 20-30 characters
 - **Instant regeneration** - press SPACE to cycle through length modes and generate a new password
 
 ## Usage
